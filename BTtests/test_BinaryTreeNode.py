@@ -1,8 +1,20 @@
+# Tests marked with @pytest.mark.xfail are throwing exceptions before assert is reached.
+# From docs.pytest.org:
+# Using pytest.raises() is likely to be better for cases where you are testing exceptions your own code is
+# deliberately raising, whereas using @pytest.mark.xfail with a check function is probably better for something
+# like documenting unfixed bugs.
+# I did not want to write "with not pytest.raises(Exception):" for every test I knew would fail with an exception,
+# so I used @pytest.mark.xfail.
+# Please use "pytest -v -m xfail" to see which tests are failing due to exceptions.
+
+
 import pytest
 from collections import namedtuple
 
 from BinaryTreeNode import BinaryTreeNode
 from BinaryTree import BinaryTree
+
+
 
 
 ############# FIXTURES #############
@@ -129,8 +141,7 @@ def test_postfixOrder_linked_nodes(linked_nodes, capfd):
 
 
 # Line 85-86 are hard to reach. It is difficult to test the functionality of a while loop without changing the code.
-# The easiest test would be moving the while loop into a helper function. Since levelOrder is in fact printing out
-# the correct order I would be happy to accept that the inbuilt .get() is indeed working as intended.
+# The easiest test would be moving the while loop into a helper function.
 def test_levelOrder_linked_nodes(linked_nodes, capfd):
     root_node = linked_nodes
     root_node.levelOrder()
@@ -251,7 +262,7 @@ def test_notequal_self_notNone_other_noneValue(sample_nodes):
 # If other node is None always returns that the 2 inputs are unequal. Which is baffling considering the equality
 # function returns True for the comparison None and self.value == None. In later tests I stuck to asserting the
 # outcome coded in the functions when it came to comparisons with object = None ( different to .value = None) despite
-# the logical inconsistencies. (e.g. if self.value(None) == None is True then self.value(None) <= None should be True
+# the logical inconsistencies. (e.g. if self.value(None) == None is True, then self.value(None) <= None should be True
 # as well)
 def test_notequal_self_notNone_other_none(sample_nodes):
     assert not sample_nodes[4] != None

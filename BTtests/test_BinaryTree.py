@@ -1,3 +1,12 @@
+# Tests marked with @pytest.mark.xfail are throwing exceptions before assert is reached.
+# From docs.pytest.org:
+# Using pytest.raises() is likely to be better for cases where you are testing exceptions your own code is
+# deliberately raising, whereas using @pytest.mark.xfail with a check function is probably better for something
+# like documenting unfixed bugs.
+# I did not want to write "with not pytest.raises(Exception):" for every test I knew would fail with an exception,
+# so I used @pytest.mark.xfail.
+# Please use "pytest -v -m xfail" to see which tests are failing due to exceptions.
+
 import pytest
 from collections import namedtuple
 
@@ -10,7 +19,7 @@ Person = namedtuple('Person', ["Etternavn", "Fornavn", "Adresse", "Postnummer", 
 ############# FIXTURES #############
 
 @pytest.fixture()
-def sample_persons():  # 6 persons so we do not have to rely on Personer.dta. Its presence is not a given.
+def sample_persons():  # 8 persons so we do not have to rely on Personer.dta. Its presence is not a given.
     person1 = Person(Etternavn='KRISTIANSEN', Fornavn='MORTEN KRISTIAN', Adresse='LEINAHYTTA 36', Postnummer='7224',
                      Poststed='MELHUS')
     person2 = Person(Etternavn='GJERSTAD', Fornavn='TORKJELL', Adresse='HOSTELAND 2 83', Postnummer='1361',
@@ -153,8 +162,8 @@ def test_insert_none_3():
         tree.insert(treenode=node)
 
 
-# In order to reach lines 81-83 i had to write a specific test where current and treenode are identical and value is
-# None and try to insert them into an empty tree. It seems odd to cover a case referencing a non existent node in an
+# In order to reach lines 81-83 I had to write a specific test where current and treenode are identical and value is
+# None and try to insert them into an empty tree. It seems odd to cover a case referencing a non-existent node in an
 # empty tree and trying to insert its duplicate.
 
 def test_insert_with_current_and_treenode(sample_persons):
