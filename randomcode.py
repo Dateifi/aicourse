@@ -1,39 +1,43 @@
-from BTtests.BinaryTree import BinaryTree
-from collections import namedtuple
-
-test_tree = BinaryTree()
-Person = namedtuple('Person', ["Etternavn", "Fornavn", "Adresse", "Postnummer", "Poststed"])
-
-with open("Personer15.dta", "r") as file:
-    for line in file:
-        test_person = Person(*line.strip().split(';'))
-        test_tree.insert(value=test_person)
+graph = {
+    'aranos': {'barlow': 14, 'daxx': 7, 'yeedil': 9},
+    'boldan': {'barlow': 9, 'oozla': 6},
+    'barlow': {'aranos': 14, 'boldan': 9, 'yeedil': 2},
+    'daxx': {'aranos': 7, 'yeedil': 10, 'oozla': 16},
+    'yeedil': {'aranos': 9, 'barlow': 2, 'daxx': 10, 'oozla': 11},
+    'oozla': {'boldan': 6, 'daxx': 15, 'yeedil': 11},
+}
 
 
-test_tree._root.prefixOrder()
+def dijkstra_shortest_path(source, destination):
+    visited = set()
+    distances = {source: 0}
+    previous = {}
+    while len(visited) < len(graph):
+        current = min(distances, key=lambda x: distances[x] if x not in visited else float('inf'))
+        visited.add(current)
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                new_distance = distances[current] + graph[current][neighbor]
+                if neighbor not in distances or new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    previous[neighbor] = current
+    path = []
+    current = destination
+    while current != source:
+        path.append(current)
+        current = previous[current]
+    path.append(source)
+    path.reverse()
+    return path
 
 
-"""Person(Etternavn='VESTLY SKIVIK', Fornavn='JAHN FREDRIK', Adresse='LINNGÅRD 22', Postnummer='1451',
-                        Poststed='NESODDTANGEN'),
-                 Person(Etternavn='NYMANN', Fornavn='ROY-ØYSTEIN', Adresse='HÅNESET 77', Postnummer='7033',
-                        Poststed='TRONDHEIM'),
-                 Person(Etternavn='ØSTBY', Fornavn='FRANK', Adresse='WÅRSETH 57', Postnummer='7414',
-                        Poststed='TRONDHEIM'),
-                 Person(Etternavn='LINNERUD', Fornavn='JOHNNY', Adresse='LÆRUM MELLEM 50', Postnummer='6507',
-                        Poststed='KRISTIANSUND N'),
-                 Person(Etternavn='REMLO', Fornavn='KIM ANDRE', Adresse='SANDFLATA 71', Postnummer='5648',
-                        Poststed='HOLMEFJORD'),
-                 Person(Etternavn='SKARSHAUG', Fornavn='ASBJØRN HARALD', Adresse='ALAPMO 72', Postnummer='7290',
-                        Poststed='STØREN'),
-                 Person(Etternavn='ELI', Fornavn='RITA HELEN', Adresse='MEHEIAVEGEN 80', Postnummer='4436',
-                        Poststed='GYLAND'),
-                 Person(Etternavn='ADOLFSEN', Fornavn='HACI', Adresse='VEDVIKA 94', Postnummer='1431', Poststed='ÅS'),
-                 Person(Etternavn='HANSNES', Fornavn='ALF-EDVART', Adresse='FJÆRLIA 43', Postnummer='0349',
-                        Poststed='OSLO'),
-                 Person(Etternavn='TUVEN', Fornavn='FREDRIK FJELD', Adresse='JERVESTIEN 48', Postnummer='2822',
-                        Poststed='BYBRUA'),
-                 Person(Etternavn='MØRSVIK', Fornavn='RITA IREN', Adresse='RØEDSLETTA I 98', Postnummer='4460',
-                        Poststed='MOI'),
-                 Person(Etternavn='KVILE', Fornavn='JAN', Adresse='THOMASBRINKEN 56', Postnummer='3002',
-                        Poststed='DRAMMEN')"""
+routes = [dijkstra_shortest_path('aranos', 'boldan'), dijkstra_shortest_path('barlow', 'aranos'),
+          dijkstra_shortest_path('daxx', 'boldan')]
+
+for route in routes:
+    cost = 0
+    for i in range(1, len(route)):
+        print(f"{route[i-1].capitalize()} -> {graph[route[i-1]][route[i]]} -> {route[i].capitalize()}")
+        cost += graph[route[i-1]][route[i]]
+    print(f"Total fuel cost: {cost}\n")
 

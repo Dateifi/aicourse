@@ -76,6 +76,7 @@ class Player():
         self.rect.centerx = int(self.x_p)
         self.rect.centery = int(self.y_p)
 
+
 pg.init()
 kalman_score = 0
 reg_score = 0
@@ -112,12 +113,13 @@ while True:
 
         # End trial if missile(s) hit, or missile is sufficiently high up
         oob = missile.rect.y < 20
-        if oob or (kalman_implemented and k_coll):
+        if oob or coll or (kalman_implemented and k_coll):
             trial = False
 
 
-    if iters % 100 == 0:
+
     # Print hit rates
+    if iters % 100 == 0:
         print('Hit rate after ' + str(iters) + ' iterations:')
         print('Without filter: ' + str(round((reg_score / iters) * 100, 1)) + ' %')
         if kalman_implemented:

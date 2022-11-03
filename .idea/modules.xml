@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/aicourse.iml" filepath="$PROJECT_DIR$/.idea/aicourse.iml" />
+      <module fileurl="file://$APPLICATION_CONFIG_DIR$/projects/workspace/.idea/workspace.iml" filepath="$APPLICATION_CONFIG_DIR$/projects/workspace/.idea/workspace.iml" />
     </modules>
   </component>
 </project>
