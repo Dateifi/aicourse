@@ -30,7 +30,8 @@ class AStar(Graph):
         self.RED = (255, 0, 0)
         self.BLUE = (0, 0, 255)
         self.delay = delay
-        # walls define obstacles in grid, e.g. walls, boxes etc, by defining each position in grid that is part of an obstacle
+        # walls define obstacles in grid, e.g. walls, boxes etc, by defining each position in grid that is
+        # part of an obstacle
         self.walls = []
 
     '''       
@@ -224,7 +225,7 @@ class AStar(Graph):
 
         enqueue(vertex)
         while priqueue:
-            # Get the element with lowest priority (i.e. weight on edge) 
+            # Get the element with the lowest priority (i.e. weight on edge)
             vertex = dequeue()
             self.pygameState(vertex, self.GREEN)
             self.pygameState(startNode, self.BLUE)
@@ -307,7 +308,7 @@ class AStar(Graph):
         start_node.known = True
         start_node.g = 0
         start_node.h = self.heuristics(startVertexName, targetVertexName)
-        start_node.f = start_node.g + D*start_node.h
+        start_node.f = start_node.g + D * start_node.h
 
         # Add the start node to the heapdict
         enqueue(start_node)
@@ -316,26 +317,24 @@ class AStar(Graph):
             # Get the element with the lowest priority (i.e. f), set known to true and increment count
             current_vertex = dequeue()
             count += 1
-            current_vertex.known = True
 
             # Copied the pygameState colour assignment from Dijkstra's algorithm
             self.pygameState(current_vertex, self.GREEN)
             self.pygameState(start_node, self.BLUE)
             self.pygameState(end_node, self.RED)
-
             # Iterate on the current vertex's adjacent edges
             for adjacent_edge in current_vertex.adjecent:
                 # calculate a temporary g value for the adjacent vertex
                 temp_g = current_vertex.g + adjacent_edge.weight
 
                 # If the temporary g is less than the adjacent vertex's g or the adjacent vertex is not known:
-                if adjacent_edge.vertex.known is False or temp_g < adjacent_edge.vertex.g:
+                if temp_g < adjacent_edge.vertex.g:
                     # Set the adjacent vertex's g to the temporary g, calculate its h and f, set its previous to the
                     # current vertex, and add it to the heapdict
                     adjacent_edge.vertex.previous = current_vertex
                     adjacent_edge.vertex.g = temp_g
                     adjacent_edge.vertex.h = self.heuristics(adjacent_edge.vertex.name, targetVertexName)
-                    adjacent_edge.vertex.f = adjacent_edge.vertex.g + D*adjacent_edge.vertex.h
+                    adjacent_edge.vertex.f = adjacent_edge.vertex.g + D * adjacent_edge.vertex.h
                     enqueue(adjacent_edge.vertex)
                     self.pygameState(adjacent_edge.vertex, self.PINK)
                     adjacent_edge.vertex.known = True
@@ -343,9 +342,9 @@ class AStar(Graph):
             if current_vertex != start_node:
                 self.pygameState(current_vertex, self.LIGHTGREY)
 
-                # If the current vertex is the end node and there is no vertex left in the queue with a potential
-                # shorter path, return the path and print number of nodes expanded (just out of
-                # curiosity)
+            # If the current vertex is the end node and there is no vertex left in the queue with a potential
+            # shorter path, return the path and print number of nodes expanded (just out of
+            # curiosity)
             if current_vertex == end_node and vertex_queue.peekitem()[1] >= end_node.f:
                 for n in self.getPath(startVertexName, targetVertexName):
                     self.pygameState(n, self.DARKGREEN)
@@ -353,7 +352,6 @@ class AStar(Graph):
                 return self.getPath(startVertexName, targetVertexName)
 
         return False
-
 
     def AStarSearch_with_priority_queue(self, startVertexName=None, targetVertexName=None):
         from queue import PriorityQueue
@@ -416,8 +414,8 @@ class AStar(Graph):
 
         return False
 
-astar = AStar(delay=0, visual=True)
 
+astar = AStar(delay=0, visual=True)
 
 # astar.readFile('minigraf.txt')
 # startVertexName, targetVertexName, removed = astar.readLimitations('minigraf_xtras.txt')
