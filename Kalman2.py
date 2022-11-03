@@ -2,6 +2,7 @@ import numpy as np
 
 
 
+
 class Kalman():
     def __init__(self):
         self.kf_x_init = np.array([[108.0], [0.7], [0.0015]])  # Initial state estimate   (x, v, a)
@@ -32,7 +33,7 @@ class Kalman():
         # State estimate at time n:
         self.kf_x_n__n = self.kf_x_n_plus1__n + np.dot(self.kf_K_n, zn - np.dot(self.kf_H, self.kf_x_n_plus1__n))
 
-        self.kf_x_n__n[0] -= 0.39
+        self.kf_x_n__n[0] -= 0.42
 
 
         # Covariance estimate at time n:

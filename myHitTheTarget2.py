@@ -11,24 +11,22 @@ except ModuleNotFoundError:
     print('No implementation of class Kalman found, running simulation without it.')
 
 import random
-
 import numpy as np
 
 
 class Target():
     def __init__(self, y_t):
-        self.x_t = random.randint(8, 208)
         self.y_t = y_t
-        self.vx_t = 0.4 + 0.6*random.randint(0, 1)
-        self.ax_t = 0.003*random.randint(0, 1)
+        self.vx_t = 0.4 + 0.6*random.random()
+        self.ax_t = 0.003*random.random()
 
-        target_left = 200 * random.random()  # Randomized starting position
-        target_top = y_t + 8
+        target_left = 200*random.random()  # Randomized starting position
+        target_top = 50
         self.rect = pg.Rect(target_left, target_top, 16, 16)
 
         # Initialize position, speed and acceleration
         self.x_t = self.rect.centerx
-        self.y = self.rect.centery
+        self.y_t = self.rect.centery
 
 
     def move(self):
@@ -82,7 +80,7 @@ pg.init()
 kalman_score = 0
 reg_score = 0
 iters = 0
-y_t = 74
+y_t = 66
 
 while True:
     target = Target(y_t)
@@ -114,13 +112,13 @@ while True:
 
         # End trial if missile(s) hit, or missile is sufficiently high up
         oob = missile.rect.y < 20
-        if oob or coll or (kalman_implemented and k_coll):
+        if oob or (kalman_implemented and k_coll):
             trial = False
 
 
-
+    if iters % 100 == 0:
     # Print hit rates
-    print('Hit rate after ' + str(iters) + ' iterations:')
-    print('Without filter: ' + str(round((reg_score / iters) * 100, 1)) + ' %')
-    if kalman_implemented:
-        print('With filter:    ' + str(round((kalman_score / iters) * 100, 1)) + ' %')
+        print('Hit rate after ' + str(iters) + ' iterations:')
+        print('Without filter: ' + str(round((reg_score / iters) * 100, 1)) + ' %')
+        if kalman_implemented:
+            print('With filter:    ' + str(round((kalman_score / iters) * 100, 1)) + ' %')
